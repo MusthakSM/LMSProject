@@ -54,7 +54,7 @@
                         // get the result set..
                         $admin_details = $stmt2->get_result();
 
-                        //
+                        // Define an array variable..
                         $Details = array();
 
                         // fetch the adminDetails row to the details array..
@@ -109,8 +109,39 @@
                     // The checkbox is not submitted or not checked
                     // Meaning it's a login for a Member not for an Admin..
                     $query = "SELECT Password FROM member WHERE userName = ?";
+                    $query2 = "SELECT * FROM member WHERE userName = ?";
+                    // prepare queries..
                     $stmt = $conn->prepare($query);
                     $stmt->bind_param("s", $userName);
+
+                    $stmt2 = $conn->prepare($query2);
+
+                    // check if the sql statement $stmt2 is prepared successfully..
+                    if($stmt2)
+                    {
+                        // Bind the parameter
+                        $stmt2->bind_param("s", $userName);
+
+                        // Execute the bind parameter...
+                        $stmt2->execute();
+                        // get the result set..
+                        $member_details = $stmt2->get_result();
+
+                        // Defining an array variable
+                        $Details = array();
+
+                        // fetch the adminDetails row to the details array..
+                        $Details[] = $member_details->fetch_assoc();
+
+                        // free the admin_details set..
+                        $member_details -> free_result();
+
+                    }
+                    else{
+                        // leave it free, No data found case will be handled by below parts..
+                    }
+
+                    $stmt2->close();
 
                     // Execute the query
                     $stmt->execute();
@@ -122,7 +153,9 @@
                         if ($password == $MemberPassword)
                         {
                             // password matches
-                            header("Location: http://localhost/LMS%20project/Member/Member.php");
+                            $sendDataString = http_build_query(array('data'=> $Details));
+                            $redirectURL = 'http://localhost/LMS%20project/Member/Member.php?'.$sendDataString;
+                            header("Location: ".$redirectURL);
                             exit;
                         }
                         else{
