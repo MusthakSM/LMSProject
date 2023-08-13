@@ -6,7 +6,7 @@
     session_start();
     $Details = $_SESSION['details'];
 
-    $adminId = $Details[0]["Member_Id"];
+    $memberId = $Details[0]["Member_Id"];
 
 
     // Get the form data submitted by the user
