@@ -108,7 +108,7 @@
                 } else {
                     // The checkbox is not submitted or not checked
                     // Meaning it's a login for a Member not for an Admin..
-                    $query = "SELECT Password FROM member WHERE userName = ?";
+                    $query = "SELECT Password, Status FROM member WHERE userName = ?";
                     $query2 = "SELECT * FROM member WHERE userName = ?";
                     // prepare queries..
                     $stmt = $conn->prepare($query);
@@ -147,16 +147,24 @@
                     $stmt->execute();
 
                     // Fetch the result
-                    $stmt->bind_result($MemberPassword);
+                    $stmt->bind_result($MemberPassword, $status);
                     if ($stmt->fetch()) {
                         // Display the MemberPassword value or use it as needed
                         if ($password == $MemberPassword)
                         {
                             // password matches
-                            $sendDataString = http_build_query(array('data'=> $Details));
-                            $redirectURL = 'http://localhost/LMS%20project/Member/Member.php?'.$sendDataString;
-                            header("Location: ".$redirectURL);
-                            exit;
+                            if ( $status == "active"){
+                                $sendDataString = http_build_query(array('data'=> $Details));
+                                $redirectURL = 'http://localhost/LMS%20project/Member/Member.php?'.$sendDataString;
+                                header("Location: ".$redirectURL);
+                                exit;
+                            }
+                            else{
+                                echo '<div class="alert alert-danger alert-dismissible text-center">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                <strong>Member is not in active state....</strong>
+                                </div>';
+                            }
                         }
                         else{
                             // Passwords do not match
