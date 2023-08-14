@@ -56,9 +56,9 @@
                     <li class="nav-item">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">BOOKS</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" >All</a></li>
-                            <li><a class="dropdown-item" href="#">For Borrow</a></li>
-                            <li><a class="dropdown-item" href="#">For Reference</a></li>
+                            <li><a class="dropdown-item" href="Display Books/AllBooks.php" target="_blank">All</a></li>
+                            <li><a class="dropdown-item" href="Display Books/BorrowableBooks.php" target="_blank">For Borrow</a></li>
+                            <li><a class="dropdown-item" href="Display Books/ReferableBooks.php" target="_blank">For Reference</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

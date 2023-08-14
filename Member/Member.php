@@ -102,7 +102,7 @@
                 <div class="col-sm-1"></div>
                 <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
                     <p class="display-6">BOOK TRANSACTION - PRESENT</p>
-                    <a href="Manage%20Admins/AllAdmins.php" class="btn btn-lg btn-success" target="_blank">CHECK</a>
+                    <a href="Current%20Transaction/CurrentDetails.php" class="btn btn-lg btn-success" target="_blank">CHECK</a>
                 </div>
                 <div class="col-sm-2"></div>
                 <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
