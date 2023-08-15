@@ -262,9 +262,12 @@
                         echo '            <p class="card-text text-danger">**Borrowable Book**</p>';
                         if ($item['Borrow_Availability'] == 1){
                             echo '            <p class="card-text text-danger">Book is Available</p>';
+                            echo '            <a href="#" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#BorrowModal">Give Borrow</a>';
+
                         }else{
                             echo '            <p class="card-text text-danger">Book is Not Available</p>';
                             echo '            <p class="card-text text-danger">Borrowed by: '.$item['Last_Borrow_Member_Id'].'</p>';
+                            echo '            <a href="#" class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#ReturnModal">Accept Return</a>';
                         }
                     }else{
                         // Refer only Book...
@@ -276,6 +279,87 @@
                     echo '    </div>';
                     echo '</div>';
                 endforeach; ?>
+                </div>
+            </div>
+
+
+            <!-- The Modal 2-->
+            <div class="modal" id="ReturnModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Borrow</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <!-- Form Element.. -->
+                            <form action="ReturnAdminAction.php" method="POST" style="margin-right: auto; margin-left:auto" class="was-validated">
+                                
+                                <input type="hidden" name="bookId" value= <?php echo $item['Book_Id'];?> >
+
+                                <div class="mb-3 mt-3">
+                                    <label for="id" class="form-label">MemberId:</label>
+                                    <input type="text" class="form-control" id="id" placeholder="Enter the member id" name="id">
+                                </div>
+
+                                <div class="mb-3 mt-3">
+                                    <label for="date" class="form-label">Return Date:</label>
+                                    <input type="date" class="form-control" id="date" placeholder="Enter the new e-mail" name="date">
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-2">Accept Return</button>
+                            </form>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Modal 1-->
+            <div class="modal" id="BorrowModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Borrow</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <!-- Form Element.. -->
+                            <form action="BorrowAdminAction.php" method="POST" style="margin-right: auto; margin-left:auto" class="was-validated">
+                                
+                                <input type="hidden" name="bookId" value= <?php echo $item['Book_Id'];?> >
+
+                                <div class="mb-3 mt-3">
+                                    <label for="id" class="form-label">MemberId:</label>
+                                    <input type="text" class="form-control" id="id" placeholder="Enter the member id" name="id">
+                                </div>
+
+                                <div class="mb-3 mt-3">
+                                    <label for="date" class="form-label">Borrow Date:</label>
+                                    <input type="date" class="form-control" id="date" placeholder="Enter the new e-mail" name="date">
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-2">Done</button>
+                            </form>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
                 </div>
             </div>
             
