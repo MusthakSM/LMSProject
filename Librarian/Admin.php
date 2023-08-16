@@ -117,7 +117,7 @@
                 <div class="col-sm-1"></div>
                 <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
                     <p class="display-6">PAST BORROW DETAILS</p>
-                    <a href="#" class="btn btn-lg btn-success" target="_blank">SHOW</a>
+                    <a href="Past%20Borrow%20Details/pastBorrowDetails.php" class="btn btn-lg btn-success" target="_blank">SHOW</a>
                 </div>
                 <div class="col-sm-2"></div>
                 <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
