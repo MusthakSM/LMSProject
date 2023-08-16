@@ -259,7 +259,7 @@
                             <hr>
                             
                             <p class="text-lightyellow text-center" >If you are not a member..</p>
-                            <p class="display-6 text-center"><a href="#" class="btn btn-lg btn-success"><span class="spinner-grow spinner-grow-sm"></span> Buy your membership now.</a></p>
+                            <p class="display-6 text-center"><a href="signUp.php" class="btn btn-lg btn-success"><span class="spinner-grow spinner-grow-sm"></span> Buy your membership now.</a></p>
                         </div>
                     </div>
                 </div>

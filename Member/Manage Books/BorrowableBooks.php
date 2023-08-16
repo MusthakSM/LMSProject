@@ -296,7 +296,7 @@
                                         <?php 
                                                 if ($item['Book.Borrow_Availability'] == 1 AND $item['Book.Last_Borrow_Member_Id'] == NULL){
                                                     echo '            <p class="card-text text-danger">Book is Available</p>';?>
-                                                    <?php if ($borrowedBooksCount < 3) : ?>
+                                                    <?php if ($borrowedBooksCount <= 3) : ?>
                                                         <!-- Show the "Borrow" button if the member can still borrow -->
                                                         <form method="post">
                                                             <input type="hidden" name="book_id" value="<?php echo $item['Book.Book_Id']; ?>">
