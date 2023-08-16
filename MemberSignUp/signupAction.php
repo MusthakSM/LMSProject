@@ -47,8 +47,8 @@
         $address = $_POST["address"];
         $cNumber = $_POST["cNumber"];
         $cMail = $_POST["cMail"];
-        $username = $_POST["username"];
-        $password = $_POST["password"];
+        $username = $_POST["usernameMember"];
+        $password = $_POST["passwordMember"];
 
         // Validate and sanitize the user input (you can add more validation as needed) - No inputs can be null here
         //First Name
