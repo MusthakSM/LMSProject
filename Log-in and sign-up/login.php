@@ -128,10 +128,10 @@
                         $member_details = $stmt2->get_result();
 
                         // Defining an array variable
-                        $Details = array();
+                        $DetailsMember = array();
 
                         // fetch the adminDetails row to the details array..
-                        $Details[] = $member_details->fetch_assoc();
+                        $DetailsMember[] = $member_details->fetch_assoc();
 
                         // free the admin_details set..
                         $member_details -> free_result();
@@ -154,7 +154,7 @@
                         {
                             // password matches
                             if ( $status == "active"){
-                                $sendDataString = http_build_query(array('data'=> $Details));
+                                $sendDataString = http_build_query(array('data'=> $DetailsMember));
                                 $redirectURL = 'http://localhost/LMS%20project/Member/Member.php?'.$sendDataString;
                                 header("Location: ".$redirectURL);
                                 exit;
