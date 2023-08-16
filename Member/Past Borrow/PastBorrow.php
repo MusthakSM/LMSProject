@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>All Members</title>
+        <title>PastBorrows</title>
         <meta charset="utf-8">
         <!-- Bootstrap 5 !-->
         <meta name="viewport" content="width = device-width, initial-scale=1">
@@ -72,7 +72,7 @@
                     <p class="display-4" style="color:white"><b>LibraNET</b></p>
                 </div>
                 <div class="col-sm-3 d-flex justify-content-end">
-                    <span style="font-size:60px; color: white;"><?php echo $Details[0]['Admin_Id']; ?>_</span>
+                    <span style="font-size:60px; color: white;"><?php echo $Details[0]['Member_Id']; ?>_</span>
                     <a href="#" data-bs-toggle="collapse" data-bs-target="#demo"><i class="bi bi-person-circle" style="font-size:60px; color:white" ></i></a> 
                 </div>
                 <div id="demo" class="collapse text-end">
@@ -83,40 +83,12 @@
             </div>
         </div>
 
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="my_nav">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul class="navbar-nav nav-pills">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">All Members</a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" href="AddMember.php">Add Member</a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" href="DeactivateMember.php">Deactivate Member</a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" href="ActivateMember.php">Activate Member</a>
-                        </li>
-                    </ul>
-                    <form action="SearchMemberAction.php" method="POST" class="d-flex" style="margin-left: 20px;" target="_blank">
-                        <input class="form-control me-2" type="text" placeholder="Member Id (or) username" name="key">
-                        <button class="btn btn-primary" type="submit">Search</button>
-                    </form>
-                </div>                
-            </div>
-        </nav>
-
         <div class="container-fluid d-flex flex-column min-vh-100" style="padding-right: 0; padding-left: 0;">
             
             <!-- Body content goes here.. -->
-            <div class="container mt-5" style="margin-right: auto; margin-left: auto; max-width: 500px;">
+            <div class="container mt-5" style="margin-right: auto; margin-left: auto; max-width: 700px;">
                 <div class="container mt-3 mb-3 text-center text-bg-danger">
-                    <div class="h1">ALL MEMBERS</div>
+                    <div class="h1">ALL PAST BORROW DETAILS</div>
                 </div>
             </div>
 
@@ -137,8 +109,12 @@
                     die("connection failed".$conn->connect_error);
                 }
                 
-                $sql = "SELECT Member_Id, Fname, Lname, DOB, NIC, Current_Address, Contact_Num, Contact_Mail, userName, Status FROM MEMBER";
+                $sql = "SELECT Book.Book_ID, Book.Title, Past_Borrows.Borrow_Date, Past_Borrows.Return_Date_Default, Past_Borrows.Return_Date_Act, Past_Borrows.Fine FROM Book, Past_Borrows WHERE Past_Borrows.Member_Id =  ? AND Book.Book_Id = Past_Borrows.Book_Id AND Past_Borrows.Return_Date_Act IS NOT NULL";
                 $stmt = $conn->prepare($sql);
+                $stmt->bind_param("s", $Details[0]["Member_Id"]);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $row = $result->fetch_assoc();
 
                 // Check if the preparation of the query was successful
                 if ($stmt) {
@@ -146,27 +122,21 @@
                     $stmt->execute();
 
                     // Bind the result variables
-                    $stmt->bind_result($memberId, $fname, $lname, $dob, $nic, $address, $contactNum, $email, $username, $status);
+                    $stmt->bind_result($BookID, $Title, $BorrowDate, $ReturnDateDefault, $ReturnDateActual, $Fine);
 
                     echo '<div class="container mt-5">';
                     // Fetch the data and print the resulting table
                     echo '<table class="table table-dark table-striped" style="font-size: 13px;">';
-                    echo '<thead><tr><th class="text-center">MemberID</th><th class="text-center">F_Name</th><th class="text-center">L_Name</th><th class="text-center">DOB</th><th class="text-center">NIC</th>
-                        <th class="text-center">Address</th><th class="text-center">ContactNum</th><th class="text-center">Email</th>
-                        <th class="text-center">Username</th><th class="text-center">Status</th></tr></thead>';
+                    echo '<thead><tr><th class="text-center">BookID</th><th class="text-center">Book Title</th><th class="text-center">Borrowed Date</th><th class="text-center">Return Date Default</th><th class="text-center">Return Date Actual</th><th class="text-center">Fine</th></tr></thread>';
                     echo '<tbody>';                    
                     while ($stmt->fetch()) {
                         echo '<tr>';
-                        echo '<td class="text-center">' . $memberId . '</td>';
-                        echo '<td class="text-center">' . $fname . '</td>';
-                        echo '<td class="text-center">' . $lname . '</td>';
-                        echo '<td class="text-center">' . $dob . '</td>';
-                        echo '<td class="text-center">' . $nic . '</td>';
-                        echo '<td class="text-center">' . $address . '</td>';
-                        echo '<td class="text-center">' . $contactNum . '</td>';
-                        echo '<td class="text-center">' . $email . '</td>';
-                        echo '<td class="text-center">' . $username . '</td>';
-                        echo '<td class="text-center">' . $status . '</td>';
+                        echo '<td class="text-center">' . $BookID . '</td>';
+                        echo '<td class="text-center">' . $Title . '</td>';
+                        echo '<td class="text-center">' . $BorrowDate . '</td>';
+                        echo '<td class="text-center">' . $ReturnDateDefault . '</td>';
+                        echo '<td class="text-center">' . $ReturnDateActual . '</td>';
+                        echo '<td class="text-center">' . $Fine . '</td>';
                         echo '</tr>';
                     }
                     echo '</tbody>';

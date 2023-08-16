@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Search Members</title>
+        <title>Search Borrows</title>
         <meta charset="utf-8">
         <!-- Bootstrap 5 !-->
         <meta name="viewport" content="width = device-width, initial-scale=1">
@@ -87,14 +87,8 @@
         <div class="container-fluid d-flex flex-column min-vh-100" style="padding-right: 0; padding-left: 0;">
             
             <!-- Body content goes here.. -->
-            <div class="container mt-5" style="margin-right: auto; margin-left: auto; max-width: 500px;">
-                <div class="container mt-3 mb-3 text-center text-bg-danger">
-                    <div class="h1">SEARCH RESULTS</div>
-                </div>
-            </div>
 
-
-            <!-- php code for retrieve admins details from the database. -->
+            <!-- php code for retrieve borrow details from the database. -->
             <?php
 
                 if($_SERVER["REQUEST_METHOD"] === "POST")
@@ -106,6 +100,11 @@
                     //searchKey
                     $searchKey = htmlspecialchars(trim($searchKey));
 
+                    echo '<div class="container mt-5" style="margin-right: auto; margin-left: auto; max-width: 500px;">';
+                    echo '    <div class="container mt-3 mb-3 text-center text-bg-danger">';
+                    echo '        <div class="h1">ALL BORROWS OF ' . $searchKey . '</div>';
+                    echo '    </div>';
+                    echo '</div>';
 
                     // Connect to your MySQL database using MySQLi or PDO
                     // Replace "your_username", "your_password", and "your_database_name" with your actual database credentials
@@ -121,10 +120,10 @@
                         die("connection failed".$conn->connect_error);
                     }
 
-                    // Check if the first letter of the searchKey is 'P' and the second letter is a number.. then a search by the id
-                    if (substr($searchKey, 0, 1) === 'M' && is_numeric(substr($searchKey, 1, 1))) {
-                        // Search by Publisher Id
-                        $sq1 = "SELECT Member_Id, Fname, Lname, DOB, NIC, Current_Address, Contact_Num, Contact_Mail, userName, Status FROM MEMBER WHERE Member_Id = ?";
+                    // Check if the first letter of the searchKey is 'B' and the second letter is a number.. then a search by the Book id
+                    if (substr($searchKey, 0, 1) === 'B' && is_numeric(substr($searchKey, 1, 1))) {
+                        // Search by Book Id
+                        $sq1 = "SELECT Book_Id, Member_Id, Borrow_Date, Return_Date_Default, Return_Date_Act, Fine FROM PAST_BORROWS WHERE Book_Id = ?";
                         $selectStmt = $conn->prepare($sq1);
                         $selectStmt->bind_param("s", $searchKey);
 
@@ -144,24 +143,18 @@
                                 echo '<div class="container mt-5">';
                                 // Fetch the data and print the resulting table
                                 echo '<table class="table table-dark table-striped" style="font-size: 18px;">';
-                                echo '<thead><tr><th class="text-center">MemberID</th><th class="text-center">F_Name</th><th class="text-center">L_Name</th><th class="text-center">DOB</th><th class="text-center">NIC</th>
-                                <th class="text-center">Address</th><th class="text-center">ContactNum</th><th class="text-center">Email</th>
-                                <th class="text-center">Username</th><th class="text-center">Status</th></tr></thead>';                                
+                                echo '<thead><tr><th class="text-center">BookID</th><th class="text-center">MemberID</th><th class="text-center">BorrowDate</th><th class="text-center">ReturnDateDefault</th><th class="text-center">ReturnDateActual</th><th class="text-center">Fine</th></tr></thead>';
                                 echo '<tbody>';      
 
                                 // Loop through the rows and output the data
                                 while ($row = $results->fetch_assoc()) {
                                     echo '<tr>';
+                                    echo '<td class="text-center">' . $row['Book_Id'] . '</td>';
                                     echo '<td class="text-center">' . $row['Member_Id'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Fname'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Lname'] . '</td>';
-                                    echo '<td class="text-center">' . $row['DOB'] . '</td>';
-                                    echo '<td class="text-center">' . $row['NIC'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Current_Address'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Contact_Num'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Contact_Mail'] . '</td>';
-                                    echo '<td class="text-center">' . $row['userName'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Status'] . '</td>';
+                                    echo '<td class="text-center">' . $row['Borrow_Date'] . '</td>';
+                                    echo '<td class="text-center">' . $row['Return_Date_Default'] . '</td>';
+                                    echo '<td class="text-center">' . $row['Return_Date_Act'] . '</td>';
+                                    echo '<td class="text-center">' . $row['Fine'] . '</td>';
                                     echo '</tr>';
                                 }
 
@@ -181,9 +174,8 @@
                         }
 
                     } else {
-                        // Search by username
-                        $sq1 = "SELECT Member_Id, Fname, Lname, DOB, NIC, Current_Address, Contact_Num, Contact_Mail, userName, Status FROM MEMBER WHERE userName = ?";
-                        $selectStmt = $conn->prepare($sq1);
+                        // Search by member Id
+                        $sq1 = "SELECT Book_Id, Member_Id, Borrow_Date, Return_Date_Default, Return_Date_Act, Fine FROM PAST_BORROWS WHERE Member_Id = ?";                        $selectStmt = $conn->prepare($sq1);
                         $selectStmt->bind_param("s", $searchKey);
 
                         // Check if the preparation of the query was successful
@@ -202,24 +194,18 @@
                                 echo '<div class="container mt-5">';
                                 // Fetch the data and print the resulting table
                                 echo '<table class="table table-dark table-striped" style="font-size: 18px;">';
-                                echo '<thead><tr><th class="text-center">MemberID</th><th class="text-center">F_Name</th><th class="text-center">L_Name</th><th class="text-center">DOB</th><th class="text-center">NIC</th>
-                                <th class="text-center">Address</th><th class="text-center">ContactNum</th><th class="text-center">Email</th>
-                                <th class="text-center">Username</th><th class="text-center">Status</th></tr></thead>';                                
+                                echo '<thead><tr><th class="text-center">BookID</th><th class="text-center">MemberID</th><th class="text-center">BorrowDate</th><th class="text-center">ReturnDateDefault</th><th class="text-center">ReturnDateActual</th><th class="text-center">Fine</th></tr></thead>';
                                 echo '<tbody>';      
 
                                 // Loop through the rows and output the data
                                 while ($row = $results->fetch_assoc()) {
                                     echo '<tr>';
+                                    echo '<td class="text-center">' . $row['Book_Id'] . '</td>';
                                     echo '<td class="text-center">' . $row['Member_Id'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Fname'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Lname'] . '</td>';
-                                    echo '<td class="text-center">' . $row['DOB'] . '</td>';
-                                    echo '<td class="text-center">' . $row['NIC'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Current_Address'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Contact_Num'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Contact_Mail'] . '</td>';
-                                    echo '<td class="text-center">' . $row['userName'] . '</td>';
-                                    echo '<td class="text-center">' . $row['Status'] . '</td>';
+                                    echo '<td class="text-center">' . $row['Borrow_Date'] . '</td>';
+                                    echo '<td class="text-center">' . $row['Return_Date_Default'] . '</td>';
+                                    echo '<td class="text-center">' . $row['Return_Date_Act'] . '</td>';
+                                    echo '<td class="text-center">' . $row['Fine'] . '</td>';
                                     echo '</tr>';
                                 }
 

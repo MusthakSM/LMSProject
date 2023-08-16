@@ -30,6 +30,8 @@
         <!-- php code for retrieve Book details from the database using the Book ID or name which comes from the POST method.. -->
         <?php
 
+            $items = array(); // Initialize the array
+
             // Get the form data submitted by the user
             // getting searchKey from POST method..
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -54,10 +56,11 @@
                     die("connection failed".$conn->connect_error);
                 }
 
+
                 // Check if the first letter of the searchKey is 'B' and the second letter is a number.. then a search by the id
                 if (substr($searchKey, 0, 1) === 'B' && is_numeric(substr($searchKey, 1, 1))) {
                     // Search by Book Id
-                    $sq1 = "SELECT Book_Id, Title, Edition, Genre, Language, year, Author, DonateFlag, DonateDate, Donated_Member_Id, BoughtFlag, Bought_Date, Seller_Id, BorrowFlag, Last_Borrow_Member_Id, Borrow_Availability, ReferFlag, Publisher_Id  FROM BOOK WHERE Book_Id = ?";
+                    $sq1 = "SELECT Book.Book_Id, Book.Title, Book.Edition, Book.Genre, Book.Language, Book.year, Book.Author, Book.DonateFlag, Book.DonateDate, Book.Donated_Member_Id, Book.BoughtFlag, Book.Bought_Date, Book.Seller_Id, Book.BorrowFlag, Book.Last_Borrow_Member_Id, Book.Borrow_Availability, Book.ReferFlag, Publisher.Publisher_Name FROM BOOK, PUBLISHER WHERE Book_Id = ? and Book.Publisher_ID = Publisher.Publisher_ID";
                     $stmt = $conn->prepare($sq1);
                     $stmt -> bind_param("s",$searchKey);
  
@@ -102,6 +105,7 @@
                         // If there's an error in the prepared statement
                         echo "Error in SQL query: " . $conn->error;
                     }
+
 
                 } else {
                     // Search by Title
@@ -152,15 +156,70 @@
                     }
                 }
 
+                if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["borrow"])) {
+                    // Get the book identifier from the hidden input
+                    $searchKey = $_POST["key"];
+                    $currentDate = date("Y-m-d");
+        
+                    // Perform the borrowing process here...
+                    // Insert into BorrowedBooks table and update the BOOK table
+        
+                    // Update the BOOK table to mark the book as borrowed
+                    $updateSql = "UPDATE BOOK SET Borrow_Availability = 0, Last_Borrow_Member_Id = ? WHERE Book_Id = ?";
+                    $updateStmt = $conn->prepare($updateSql);
+                    $updateStmt->bind_param("ss", $Details[0]['Member_Id'], $searchKey);
+        
+                    if ($updateStmt->execute()) {
+                        // Successfully updated the book's status
+        
+                        // Insert the borrowing details into the BorrowedBooks table
+                        $insertSql = "INSERT INTO Past_borrows (Book_Id, Member_Id, Borrow_Date) VALUES (?, ?, ?)";
+                        $insertStmt = $conn->prepare($insertSql);
+                        $insertStmt->bind_param("sss", $searchKey, $Details[0]['Member_Id'], $currentDate);
+        
+                        if ($insertStmt->execute()) {
+                            // Successfully inserted the borrowing details
+                            $items = array(); // Re-initialize the array
+                            // Redirect back to the search page after successful borrowing
+                            header("Location: http://localhost/LMS%20project/Member/Manage%20Books/SearchBook.php?");
+                            exit();
+                        } else {
+                            // Error handling
+                            echo "Error inserting borrowing details: " . $conn->error;
+                        }
+        
+                        $insertStmt->close();
+                    } else {
+                        // Error handling
+                        echo "Error updating book status: " . $conn->error;
+                    }
+        
+                    $updateStmt->close();
+                }
+
+
                 // Close the database connection
                 $conn->close();
             }
             
             //count of the total books
             $totalBooks = count($items);
+
+            
+
+                // Check if the session variable exists and retrieve its value
+                if (isset($_SESSION['borrowedBooksCount'])) {
+                    $borrowedBooksCount = $_SESSION['borrowedBooksCount'];
+                } else {
+                    $borrowedBooksCount = 0; // Default value
+                }
+                
             
         
         ?>
+
+        
+    
 
         <style>
             body{
@@ -207,7 +266,7 @@
                     <p class="display-4" style="color:white"><b>LibraNET</b></p>
                 </div>
                 <div class="col-sm-3 d-flex justify-content-end">
-                    <span style="font-size:60px; color: white;"><?php echo $Details[0]['Admin_Id']; ?>_</span>
+                    <span style="font-size:60px; color: white;"><?php echo $Details[0]['Member_Id']; ?>_</span>
                     <a href="#" data-bs-toggle="collapse" data-bs-target="#demo"><i class="bi bi-person-circle" style="font-size:60px; color:white" ></i></a> 
                 </div>
                 <div id="demo" class="collapse text-end">
@@ -227,11 +286,13 @@
                 </div>
             </div>
 
+            
+
             <div class="container" style="margin-top: 30px;">
                 <div class="row">
                 <?php foreach ($items as $item) :
                     echo '<div class="col-md-3 mb-3">';
-                    echo '    <div class="card bg-dark mx-auto" style="width: 300px;">';
+                    echo '    <div class="card bg-dark mx-auto" style="width: 270px;">';
                     echo '        <img class="card-img-top" src="http://localhost/LMS%20project/BookImages/' . str_replace('+', '%20', urlencode($item['Title'])) . '.png" alt="Card image" style="width:100%">';
                     echo '        <div class="card-body">';
                     echo '            <div class="card-body text-center text-white">';
@@ -244,34 +305,27 @@
                     echo '                <p class="card-text">Author: ' . $item['Author'] . '</p>';
                     echo '                <p class="card-text">Publisher: ' . ($item['Publisher_Id'] ? $item['Publisher_Id'] : 'Unknown') . '</p>';
 
-                    if ($item['DonateFlag'] == 1){
-                        // It's a donated book
-                        echo '            <p class="card-text text-danger">**Donated Book**</p>';
-                        echo '            <p class="card-text">Donated Date: ' . $item['DonateDate'] . '</p>';
-                        echo '            <p class="card-text">Donated Member Id: ' . $item['Donated_Member_Id'] . '</p>';
-                    }else{
-                        // It's Bought book
-                        echo '            <p class="card-text text-danger">**Bought Book**</p>';
-                        echo '            <p class="card-text">Bought Date: ' . $item['Bought_Date'] . '</p>';
-                        echo '            <p class="card-text">Seller Id: ' . $item['Seller_Id'] . '</p>';
-                    }
 
-                    if ($item['BorrowFlag'] == 1)
-                    {
-                        // Borrowable book...
-                        echo '            <p class="card-text text-danger">**Borrowable Book**</p>';
-                        if ($item['Borrow_Availability'] == 1){
-                            echo '            <p class="card-text text-danger">Book is Available</p>';
-                            echo '            <a href="#" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#BorrowModal">Give Borrow</a>';
-
-                        }else{
-                            echo '            <p class="card-text text-danger">Book is Not Available</p>';
-                            echo '            <p class="card-text text-danger">Borrowed by: '.$item['Last_Borrow_Member_Id'].'</p>';
-                            echo '            <a href="#" class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#ReturnModal">Accept Return</a>';
+                    if ($item['BorrowFlag'] == 1) {
+                        if ($item['Borrow_Availability'] == 1 && $item['Last_Borrow_Member_Id'] == null) {
+                            if ($borrowedBooksCount < 3) {
+                                // Display the borrow button
+                                echo '    <form method="post">';
+                                echo '        <input type="hidden" name="key" value="' . $searchKey . '">';
+                                echo '        <input type="submit" class="btn btn-success" name="borrow" value="BORROW">';
+                                echo '    </form>';
+                            } else {
+                                // Display message about reaching borrowing limit
+                                echo '    <p class="card-text text-danger">You have reached the maximum borrowing limit of 3 books.</p>';
+                            }
+                        } elseif ($item['Borrow_Availability'] == '0' && $item['Last_Borrow_Member_Id'] == null && $item['ReferFlag'] == '0') {
+                            echo '    <p class="card-text text-danger">Book is Not Available</p>';
+                        } else {
+                            echo '    <p class="card-text text-danger">The book has been borrowed.</p>';
                         }
-                    }else{
+                    } else {
                         // Refer only Book...
-                        echo '            <p class="card-text text-danger">**Refer only Book**</p>';
+                        echo '    <p class="card-text text-danger">**Refer only Book**</p>';
                     }
 
                     echo '            </div>';
@@ -282,86 +336,8 @@
                 </div>
             </div>
 
+           
 
-            <!-- The Modal 2-->
-            <div class="modal" id="ReturnModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">Borrow</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-                            <!-- Form Element.. -->
-                            <form action="ReturnAdminAction.php" method="POST" style="margin-right: auto; margin-left:auto" class="was-validated">
-                                
-                                <input type="hidden" name="bookId" value= <?php echo $item['Book_Id'];?> >
-
-                                <div class="mb-3 mt-3">
-                                    <label for="id" class="form-label">MemberId:</label>
-                                    <input type="text" class="form-control" id="id" placeholder="Enter the member id" name="id">
-                                </div>
-
-                                <div class="mb-3 mt-3">
-                                    <label for="date" class="form-label">Return Date:</label>
-                                    <input type="date" class="form-control" id="date" placeholder="Enter the new e-mail" name="date">
-                                </div>
-                                <button type="submit" class="btn btn-primary mt-2">Accept Return</button>
-                            </form>
-                        </div>
-
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- The Modal 1-->
-            <div class="modal" id="BorrowModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">Borrow</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-                            <!-- Form Element.. -->
-                            <form action="BorrowAdminAction.php" method="POST" style="margin-right: auto; margin-left:auto" class="was-validated">
-                                
-                                <input type="hidden" name="bookId" value= <?php echo $item['Book_Id'];?> >
-
-                                <div class="mb-3 mt-3">
-                                    <label for="id" class="form-label">MemberId:</label>
-                                    <input type="text" class="form-control" id="id" placeholder="Enter the member id" name="id">
-                                </div>
-
-                                <div class="mb-3 mt-3">
-                                    <label for="date" class="form-label">Borrow Date:</label>
-                                    <input type="date" class="form-control" id="date" placeholder="Enter the new e-mail" name="date">
-                                </div>
-                                <button type="submit" class="btn btn-primary mt-2">Done</button>
-                            </form>
-                        </div>
-
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
             
             <!-- Spacer to push the footer to the bottom when content height is not enough -->
             <div class="flex-grow-1"></div>

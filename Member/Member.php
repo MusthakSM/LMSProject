@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Admin</title>
+        <title>Member</title>
         <meta charset="utf-8">
         <!-- Bootstrap 5 !-->
         <meta name="viewport" content="width = device-width, initial-scale=1">
@@ -72,7 +72,7 @@
                     <p class="display-4" style="color:white"><b>LibraNET</b></p>
                 </div>
                 <div class="col-sm-3 d-flex justify-content-end">
-                    <span style="font-size:60px; color: white;"><?php echo $Details[0]['Admin_Id']; ?>_</span>
+                    <span style="font-size:60px; color: white;"><?php echo $Details[0]['Member_Id']; ?>_</span>
                     <a href="#" data-bs-toggle="collapse" data-bs-target="#demo"><i class="bi bi-person-circle" style="font-size:60px; color:white" ></i></a> 
                 </div>
                 <div id="demo" class="collapse text-end">
@@ -88,52 +88,32 @@
             <div class="row mx-5 mt-5">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
-                    <p class="display-6">BOOKS</p>
-                    <a href="Manage%20Books/AllBooks.php" class="btn btn-lg btn-success" target="_blank">MANAGE</a>
+                    <p class="display-6">AVAILABILITY OF BOOKS</p>
+                    <a href="Manage%20Books/AllBooks.php" class="btn btn-lg btn-success" target="_blank">CHECK</a>
                 </div>
                 <div class="col-sm-2"></div>
                 <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
-                    <p class="display-6">MEMBERS</p>
-                    <a href="Manage%20Members/AllMembers.php" class="btn btn-lg btn-success" target="_blank">MANAGE</a>
+                    <p class="display-6">PERSONAL INFO</p>
+                    <a href="Personal%20Info/PersonalInfo.php" class="btn btn-lg btn-success" target="_blank">MANAGE</a>
                 </div>
-                <div class="col-sm-1"></div>
             </div><br>
             
             <div class="row mx-5 mt-5">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
-                    <p class="display-6">PERSONAL INFO</p>
-                    <a href="Personal%20Info/PersonalInfo.php" class="btn btn-lg btn-success" target="_blank">MANAGE</a>
+                    <p class="display-6">BOOK TRANSACTION - PRESENT</p>
+                    <a href="Current%20Transaction/CurrentDetails.php" class="btn btn-lg btn-success" target="_blank">CHECK</a>
                 </div>
                 <div class="col-sm-2"></div>
-                <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
-                    <p class="display-6">ADMINS</p>
-                    <a href="Manage%20Admins/AllAdmins.php" class="btn btn-lg btn-success" target="_blank">MANAGE</a>
-                </div>
-                <div class="col-sm-1"></div>
-            </div><br>
-
-            <div class="row mx-5 mt-5">
-                <div class="col-sm-1"></div>
                 <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
                     <p class="display-6">PAST BORROW DETAILS</p>
-                    <a href="Past%20Borrow%20Details/pastBorrowDetails.php" class="btn btn-lg btn-success" target="_blank">SHOW</a>
+                    <a href="Past%20Borrow/PastBorrow.php" class="btn btn-lg btn-success" target="_blank">SHOW</a>
                 </div>
-                <div class="col-sm-2"></div>
-                <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
-                    <p class="display-6">SELLERS</p>
-                    <a href="Manage%20Sellers/AllSellers.php" class="btn btn-lg btn-success" target="_blank">MANAGE</a>
-                </div>
-                <div class="col-sm-1"></div>
             </div><br>
 
             <div class="row mx-5 mt-5">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
-                    <p class="display-6">PUBLISHERS</p>
-                    <a href="Manage%20Publishers/AllPublishers.php" class="btn btn-lg btn-success" target="_blank">MANAGE</a>
-                </div>
-                <div class="col-sm-2"></div>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                 <div class="col-sm-4 pt-4 pb-4 px-2 bg-brown text-lightyellow text-center rounded-4">
                     <p class="display-6">CHANGE PASSWORD</p>
                     <a href="Change%20Password/changePassword.php" class="btn btn-lg btn-success" target="_blank">CHANGE</a>

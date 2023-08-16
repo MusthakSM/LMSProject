@@ -54,7 +54,7 @@
                         // get the result set..
                         $admin_details = $stmt2->get_result();
 
-                        //
+                        // Define an array variable..
                         $Details = array();
 
                         // fetch the adminDetails row to the details array..
@@ -108,22 +108,63 @@
                 } else {
                     // The checkbox is not submitted or not checked
                     // Meaning it's a login for a Member not for an Admin..
-                    $query = "SELECT Password FROM member WHERE userName = ?";
+                    $query = "SELECT Password, Status FROM member WHERE userName = ?";
+                    $query2 = "SELECT * FROM member WHERE userName = ?";
+                    // prepare queries..
                     $stmt = $conn->prepare($query);
                     $stmt->bind_param("s", $userName);
+
+                    $stmt2 = $conn->prepare($query2);
+
+                    // check if the sql statement $stmt2 is prepared successfully..
+                    if($stmt2)
+                    {
+                        // Bind the parameter
+                        $stmt2->bind_param("s", $userName);
+
+                        // Execute the bind parameter...
+                        $stmt2->execute();
+                        // get the result set..
+                        $member_details = $stmt2->get_result();
+
+                        // Defining an array variable
+                        $DetailsMember = array();
+
+                        // fetch the adminDetails row to the details array..
+                        $DetailsMember[] = $member_details->fetch_assoc();
+
+                        // free the admin_details set..
+                        $member_details -> free_result();
+
+                    }
+                    else{
+                        // leave it free, No data found case will be handled by below parts..
+                    }
+
+                    $stmt2->close();
 
                     // Execute the query
                     $stmt->execute();
 
                     // Fetch the result
-                    $stmt->bind_result($MemberPassword);
+                    $stmt->bind_result($MemberPassword, $status);
                     if ($stmt->fetch()) {
                         // Display the MemberPassword value or use it as needed
                         if ($password == $MemberPassword)
                         {
                             // password matches
-                            header("Location: http://localhost/LMS%20project/Member/Member.php");
-                            exit;
+                            if ( $status == "active"){
+                                $sendDataString = http_build_query(array('data'=> $DetailsMember));
+                                $redirectURL = 'http://localhost/LMS%20project/Member/Member.php?'.$sendDataString;
+                                header("Location: ".$redirectURL);
+                                exit;
+                            }
+                            else{
+                                echo '<div class="alert alert-danger alert-dismissible text-center">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                <strong>Member is not in active state....</strong>
+                                </div>';
+                            }
                         }
                         else{
                             // Passwords do not match
@@ -218,7 +259,7 @@
                             <hr>
                             
                             <p class="text-lightyellow text-center" >If you are not a member..</p>
-                            <p class="display-6 text-center"><a href="#" class="btn btn-lg btn-success"><span class="spinner-grow spinner-grow-sm"></span> Buy your membership now.</a></p>
+                            <p class="display-6 text-center"><a href="signUp.php" class="btn btn-lg btn-success"><span class="spinner-grow spinner-grow-sm"></span> Buy your membership now.</a></p>
                         </div>
                     </div>
                 </div>

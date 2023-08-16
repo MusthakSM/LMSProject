@@ -14,19 +14,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
-        <?php
-            session_start();
-            $Details = $_SESSION['details'];
-
-            // Redirecting to the log-in page if logout button is pressed....
-            if (isset($_POST['Logout'])) {
-
-                // Redirect the user to the login page
-                header("Location: http://localhost/LMS%20project/Log-in%20and%20sign-up/login.php");
-                exit;
-            }
-        ?>
-
         <!-- php code for retrieve Book details from the database using the Book ID or name which comes from the POST method.. -->
         <?php
 
@@ -205,16 +192,7 @@
             <div class="row px-4 pt-3 pb-3 bg-brown"> 
                 <div class="col-sm-9">
                     <p class="display-4" style="color:white"><b>LibraNET</b></p>
-                </div>
-                <div class="col-sm-3 d-flex justify-content-end">
-                    <span style="font-size:60px; color: white;"><?php echo $Details[0]['Admin_Id']; ?>_</span>
-                    <a href="#" data-bs-toggle="collapse" data-bs-target="#demo"><i class="bi bi-person-circle" style="font-size:60px; color:white" ></i></a> 
-                </div>
-                <div id="demo" class="collapse text-end">
-                    <form method="post">
-                        <button type="submit" name="Logout" class="btn btn-danger">Logout</button>
-                    </form>
-                </div>  
+                </div> 
             </div>
         </div>
 
@@ -244,31 +222,10 @@
                     echo '                <p class="card-text">Author: ' . $item['Author'] . '</p>';
                     echo '                <p class="card-text">Publisher: ' . ($item['Publisher_Id'] ? $item['Publisher_Id'] : 'Unknown') . '</p>';
 
-                    if ($item['DonateFlag'] == 1){
-                        // It's a donated book
-                        echo '            <p class="card-text text-danger">**Donated Book**</p>';
-                        echo '            <p class="card-text">Donated Date: ' . $item['DonateDate'] . '</p>';
-                        echo '            <p class="card-text">Donated Member Id: ' . $item['Donated_Member_Id'] . '</p>';
-                    }else{
-                        // It's Bought book
-                        echo '            <p class="card-text text-danger">**Bought Book**</p>';
-                        echo '            <p class="card-text">Bought Date: ' . $item['Bought_Date'] . '</p>';
-                        echo '            <p class="card-text">Seller Id: ' . $item['Seller_Id'] . '</p>';
-                    }
-
                     if ($item['BorrowFlag'] == 1)
                     {
                         // Borrowable book...
                         echo '            <p class="card-text text-danger">**Borrowable Book**</p>';
-                        if ($item['Borrow_Availability'] == 1){
-                            echo '            <p class="card-text text-danger">Book is Available</p>';
-                            echo '            <a href="#" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#BorrowModal">Give Borrow</a>';
-
-                        }else{
-                            echo '            <p class="card-text text-danger">Book is Not Available</p>';
-                            echo '            <p class="card-text text-danger">Borrowed by: '.$item['Last_Borrow_Member_Id'].'</p>';
-                            echo '            <a href="#" class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#ReturnModal">Accept Return</a>';
-                        }
                     }else{
                         // Refer only Book...
                         echo '            <p class="card-text text-danger">**Refer only Book**</p>';
@@ -279,87 +236,6 @@
                     echo '    </div>';
                     echo '</div>';
                 endforeach; ?>
-                </div>
-            </div>
-
-
-            <!-- The Modal 2-->
-            <div class="modal" id="ReturnModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">Borrow</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-                            <!-- Form Element.. -->
-                            <form action="ReturnAdminAction.php" method="POST" style="margin-right: auto; margin-left:auto" class="was-validated">
-                                
-                                <input type="hidden" name="bookId" value= <?php echo $item['Book_Id'];?> >
-
-                                <div class="mb-3 mt-3">
-                                    <label for="id" class="form-label">MemberId:</label>
-                                    <input type="text" class="form-control" id="id" placeholder="Enter the member id" name="id">
-                                </div>
-
-                                <div class="mb-3 mt-3">
-                                    <label for="date" class="form-label">Return Date:</label>
-                                    <input type="date" class="form-control" id="date" placeholder="Enter the new e-mail" name="date">
-                                </div>
-                                <button type="submit" class="btn btn-primary mt-2">Accept Return</button>
-                            </form>
-                        </div>
-
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- The Modal 1-->
-            <div class="modal" id="BorrowModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">Borrow</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-                            <!-- Form Element.. -->
-                            <form action="BorrowAdminAction.php" method="POST" style="margin-right: auto; margin-left:auto" class="was-validated">
-                                
-                                <input type="hidden" name="bookId" value= <?php echo $item['Book_Id'];?> >
-
-                                <div class="mb-3 mt-3">
-                                    <label for="id" class="form-label">MemberId:</label>
-                                    <input type="text" class="form-control" id="id" placeholder="Enter the member id" name="id">
-                                </div>
-
-                                <div class="mb-3 mt-3">
-                                    <label for="date" class="form-label">Borrow Date:</label>
-                                    <input type="date" class="form-control" id="date" placeholder="Enter the new e-mail" name="date">
-                                </div>
-                                <button type="submit" class="btn btn-primary mt-2">Done</button>
-                            </form>
-                        </div>
-
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        </div>
-
-                    </div>
                 </div>
             </div>
             

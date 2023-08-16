@@ -168,6 +168,71 @@
                             }
                             // Close the statement
                             $selectStmt->close();
+
+                            echo '<div class="container mt-5" style="margin-right: auto; margin-left: auto; max-width: 500px;">';
+                            echo '    <div class="container mt-3 mb-3 text-center text-bg-danger">';
+                            echo '        <div class="h1">BOOKS SOLD BY ' . $searchKey . '</div>';
+                            echo '    </div>';
+                            echo '</div>';
+
+                            $sq1forBook = "SELECT Book_Id, Title, Edition, Genre, Language, year, Author FROM BOOK WHERE Seller_Id = ?";
+                            $stmtforBook = $conn->prepare($sq1forBook);
+                            $stmtforBook->bind_param("s", $searchKey);
+
+                            // Check if the preparation of the query was successful
+                            if ($stmtforBook) {
+                                // Execute the query
+                                $stmtforBook->execute();
+
+                                // Bind the result variables to fetch the data
+                                $stmtforBook->bind_result($Book_Id, $Title, $Edition, $Genre, $Language, $Year, $Author);
+
+                                // Fetch each row and store them in an array
+                                $items = array();
+                                while ($stmtforBook->fetch()) {
+                                    $item = array(
+                                        'Book_Id' => $Book_Id,
+                                        'Title' => $Title,
+                                        'Edition' => $Edition,
+                                        'Genre' => $Genre,
+                                        'Language' => $Language,
+                                        'Year' => $Year,
+                                        'Author' => $Author,
+                                    );
+                                    $items[] = $item;
+                                }
+
+                                // Close the statement
+                                $stmtforBook->close();
+                            } else {
+                                // If there's an error in the prepared statement
+                                echo "Error in SQL query: " . $conn->error;
+                            }
+
+
+                            echo '<div class="container" style="margin-top: 30px;">';
+                            echo '    <div class="row">';
+                                        foreach ($items as $item) :
+                            echo '            <div class="col-md-3 mb-3">';
+                            echo '                <div class="card bg-dark mx-auto" style="width: 300px;">';
+                            echo '                    <img class="card-img-top" src="http://localhost/LMS%20project/BookImages/' . str_replace("+", "%20", urlencode($item["Title"])) . '.png" alt="Card image" style="width:100%" >';
+                            echo '                    <div class="card-body">';
+                            echo '                        <div class="card-body text-center text-white">';
+                            echo '                            <h5 class="card-title">'.$item["Title"]. '</h5>';
+                            echo '                            <p class="card-text">Book ID: '. $item["Book_Id"] .'</p>';
+                            echo '                            <p class="card-text">Edition: '.$item["Edition"].'</p>';
+                            echo '                            <p class="card-text">Genre: '. $item["Genre"].'</p>';
+                            echo '                            <p class="card-text">Language: '.$item["Language"].'</p>';
+                            echo '                            <p class="card-text">Year: '.$item["Year"].'</p>';
+                            echo '                            <p class="card-text">Author: '.$item["Author"].'</p>';
+                            echo '                        </div>';
+                            echo '                    </div>';
+                            echo '                </div>';
+                            echo '            </div>';
+                                        endforeach; 
+                            echo '    </div>';
+                            echo '</div>';
+
                         } else {
                             // If there's an error in the prepared statement
                             echo "Error in SQL query: " . $conn->error;
@@ -220,6 +285,73 @@
 
                             // Close the statement
                             $selectStmt->close();
+
+                            echo '<div class="container mt-5" style="margin-right: auto; margin-left: auto; max-width: 500px;">';
+                            echo '    <div class="container mt-3 mb-3 text-center text-bg-danger">';
+                            echo '        <div class="h1">BOOKS SOLD BY ' . $searchKey . '</div>';
+                            echo '    </div>';
+                            echo '</div>';
+
+                            $sq1forBook = "SELECT Book_Id, Title, Edition, Genre, Language, year, Author FROM BOOK
+                                        INNER JOIN SELLER ON BOOK.Seller_Id = SELLER.Seller_Id
+                                        WHERE SELLER.Seller_Name = ?";
+                            $stmtforBook = $conn->prepare($sq1forBook);
+                            $stmtforBook->bind_param("s", $searchKey);
+
+                            // Check if the preparation of the query was successful
+                            if ($stmtforBook) {
+                                // Execute the query
+                                $stmtforBook->execute();
+
+                                // Bind the result variables to fetch the data
+                                $stmtforBook->bind_result($Book_Id, $Title, $Edition, $Genre, $Language, $Year, $Author);
+
+                                // Fetch each row and store them in an array
+                                $items = array();
+                                while ($stmtforBook->fetch()) {
+                                    $item = array(
+                                        'Book_Id' => $Book_Id,
+                                        'Title' => $Title,
+                                        'Edition' => $Edition,
+                                        'Genre' => $Genre,
+                                        'Language' => $Language,
+                                        'Year' => $Year,
+                                        'Author' => $Author,
+                                    );
+                                    $items[] = $item;
+                                }
+
+                                // Close the statement
+                                $stmtforBook->close();
+                            } else {
+                                // If there's an error in the prepared statement
+                                echo "Error in SQL query: " . $conn->error;
+                            }
+
+
+                            echo '<div class="container" style="margin-top: 30px;">';
+                            echo '    <div class="row">';
+                                        foreach ($items as $item) :
+                            echo '            <div class="col-md-3 mb-3">';
+                            echo '                <div class="card bg-dark mx-auto" style="width: 300px;">';
+                            echo '                    <img class="card-img-top" src="http://localhost/LMS%20project/BookImages/' . str_replace("+", "%20", urlencode($item["Title"])) . '.png" alt="Card image" style="width:100%" >';
+                            echo '                    <div class="card-body">';
+                            echo '                        <div class="card-body text-center text-white">';
+                            echo '                            <h5 class="card-title">'.$item["Title"]. '</h5>';
+                            echo '                            <p class="card-text">Book ID: '. $item["Book_Id"] .'</p>';
+                            echo '                            <p class="card-text">Edition: '.$item["Edition"].'</p>';
+                            echo '                            <p class="card-text">Genre: '. $item["Genre"].'</p>';
+                            echo '                            <p class="card-text">Language: '.$item["Language"].'</p>';
+                            echo '                            <p class="card-text">Year: '.$item["Year"].'</p>';
+                            echo '                            <p class="card-text">Author: '.$item["Author"].'</p>';
+                            echo '                        </div>';
+                            echo '                    </div>';
+                            echo '                </div>';
+                            echo '            </div>';
+                                        endforeach; 
+                            echo '    </div>';
+                            echo '</div>';
+
                         } else {
                             // If there's an error in the prepared statement
                             echo "Error in SQL query: " . $conn->error;

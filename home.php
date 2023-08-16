@@ -36,6 +36,12 @@
                 color: #510400;
             }
 
+            #my_nav .active{
+                color: lightyellow;
+                background-color: #510400;
+            }
+
+
         </style>
 
     </head>
@@ -48,21 +54,21 @@
             <div class="col-sm-8 pt-4 ">
                 <ul class="nav nav-pills justify-content-end" id="my_nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="home.php" style="background-color: #510400; color:lightyellow;">HOME</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="About us/aboutus.html" target="_blank">ABOUT US</a>
+                        <a class="nav-link active" href="home.php">HOME</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">BOOKS</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" >All</a></li>
-                            <li><a class="dropdown-item" href="#">For Borrow</a></li>
-                            <li><a class="dropdown-item" href="#">For Reference</a></li>
+                            <li><a class="dropdown-item" href="Display Books/AllBooks.php" target="_blank">All</a></li>
+                            <li><a class="dropdown-item" href="Display Books/BorrowableBooks.php" target="_blank">For Borrow</a></li>
+                            <li><a class="dropdown-item" href="Display Books/ReferableBooks.php" target="_blank">For Reference</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">CONTACTS</a>
+                        <a class="nav-link" href="ContactUs/contact_us.php">CONTACTS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="About us/aboutus.html" target="_blank">ABOUT US</a>
                     </li>
                 </ul>
             </div>
@@ -88,7 +94,7 @@
                 <div class="card rounded bg-brown text-center p-3">
                     <img src="clipart1185851.png" alt="newMembershipIcon" class="mx-auto d-block img-fluid" style="width:250px; height:250px">
                     <p class="display-4 text-lightyellow" >Get your Membership now..</p>
-                    <p><a href="#" class="btn btn-lg btn-primary"><span class="spinner-grow spinner-grow-sm"></span> Buy Now</a></p>
+                    <p><a href="Log-in and sign-up/signUp.php" class="btn btn-lg btn-primary"><span class="spinner-grow spinner-grow-sm"></span> Buy Now</a></p>
                 </div>
             </div>
             <div class="col-sm-2"></div>
