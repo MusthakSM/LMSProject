@@ -104,7 +104,7 @@
                         </li>
                     </ul>
                     <form action="SearchMemberAction.php" method="POST" class="d-flex" style="margin-left: 20px;" target="_blank">
-                        <input class="form-control me-2" type="text" placeholder="Member Id (or) Name" name="key">
+                        <input class="form-control me-2" type="text" placeholder="Member Id (or) username" name="key">
                         <button class="btn btn-primary" type="submit">Search</button>
                     </form>
                 </div>                
