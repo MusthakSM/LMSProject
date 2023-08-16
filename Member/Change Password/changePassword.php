@@ -22,7 +22,7 @@
             if (isset($_POST['Logout'])) {
 
                 // Redirect the user to the login page
-                header("Location: Location: http://localhost/LMS%20project/Log-in%20and%20sign-up/login.php");
+                header("Location: http://localhost/LMS%20project/Log-in%20and%20sign-up/login.php");
                 exit;
             }
         ?>
