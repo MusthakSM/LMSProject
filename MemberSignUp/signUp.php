@@ -24,10 +24,6 @@
                 exit;
             }
 
-
-
-            
-
         ?>
 
 
@@ -134,13 +130,13 @@
                     </div>
 
                     <div class="mb-3 mt-3">
-                        <label for="username" class="form-label">User Name:</label>
-                        <input type="text" class="form-control" id="user" placeholder="Enter a user name you prefer" name="username" required>
+                        <label for="usernameMember" class="form-label">User Name:</label>
+                        <input type="text" class="form-control" id="usernameMember" placeholder="Enter a user name you prefer" name="usernameMember" required>
                     </div>
 
                     <div class="mb-3 mt-3">
-                        <label for="password" class="form-label">Password:</label>
-                        <input type="text" class="form-control" id="password" placeholder="Enter a password of 8 digits" name="password" required>
+                        <label for="passwordMember" class="form-label">Password:</label>
+                        <input type="text" class="form-control" id="passwordMember" placeholder="Enter a password of 8 digits" name="passwordMember" required>
                     </div>
 
                     <div class="mb-3 mt-3">
