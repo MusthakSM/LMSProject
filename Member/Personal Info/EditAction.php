@@ -25,7 +25,7 @@
         $servername = "localhost";
         $username = "root";
         $password = "";
-        $dbname = "project_final";
+        $dbname = "trybench";
 
         $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -34,7 +34,7 @@
         }
 
         // Prepare and execute the SQL SELECT statement to retrieve the admin name and the mail for the given admin Id
-        $selectSql = "SELECT Member_ID, FName, LName, DOB, NIC, Current_Address, Contact_Num, Contact_Mail, userName FROM member WHERE Member_Id = ?";
+        $selectSql = "SELECT Member_ID, Fname, Lname, DOB, NIC, Current_Address, Contact_Num, Contact_Mail, userName FROM member WHERE Member_Id = ?";
         $selectStmt = $conn->prepare($selectSql);
         $selectStmt->bind_param("s", $memberId);
         $selectStmt->execute();

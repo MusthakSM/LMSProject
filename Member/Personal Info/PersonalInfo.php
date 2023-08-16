@@ -22,7 +22,7 @@
             if (isset($_POST['Logout'])) {
 
                 // Redirect the user to the login page
-                header("Location: http://localhost/LMS%20project/Log-in%20and%20sign-up/login.php");
+                header("Location: http://localhost/LMS%20project/Log-in and sign-up/login.php");
                 exit;
             }
         ?>
@@ -42,7 +42,7 @@
                 die("connection failed".$conn->connect_error);
             }
 
-            // Prepare and execute the SQL SELECT statement to retrieve the admin name and the mail for the given admin Id
+            // Prepare and execute the SQL SELECT statement to retrieve the member name and the mail for the given member's user Name
             $selectSql = "SELECT Member_ID, Fname, Lname, DOB, NIC, Current_Address, Contact_Num, Contact_Mail, userName FROM member WHERE Member_Id = ?";
             $selectStmt = $conn->prepare($selectSql);
             $selectStmt->bind_param("s", $Details[0]["Member_Id"]);
@@ -112,20 +112,20 @@
             <div class="container" style="width:800px; margin-top:80px">
                 <p class="display-5 text-center text-bg-danger"><b>My INFO</b></p>
         
-                <div class="row bg-white" style="width:800px; height: 400px;">
+                <div class="row bg-white" style="width:800px;">
                     <div class="col-sm-6" style="padding: 0;">
                         <img class="img-fluid" src="img_avatar1.png" alt="Card image" style="width:400px; height:400px;">
                     </div>
                     <div class="col-sm-6">
-                        <div style="margin-inline-start: 30px; margin-top: 100px;">
-                            <p class="h4">Member Id: <?php echo $Details[0]['Member_Id']; ?></p>
-                            <p class="h4">Name: <?php echo $row['Fname']." ".$row['Lname']; ?></p>
-                            <p class="h4">Date of Birth: <?php echo $row['DOB']; ?></p>
-                            <p class="h4">NIC: <?php echo $row['NIC']; ?></p>
-                            <p class="h4">Current Address: <?php echo $row['Current_Address']; ?></p>
-                            <p class="h4">Contact Number: <?php echo $row['Contact_Num']; ?></p>
-                            <p class="h4">Email: <?php echo $row['Contact_Mail']; ?></p>
-                            <p class="h4">User Name: <?php echo $row['userName']; ?></p>
+                        <div style="margin-inline-start: 30px; margin-top: 20px;">
+                            <p class="h5">Member Id: <?php echo $Details[0]['Member_Id']; ?></p>
+                            <p class="h5">Name: <?php echo $row['Fname']." ".$row['Lname']; ?></p>
+                            <p class="h5">Date of Birth: <?php echo $row['DOB']; ?></p>
+                            <p class="h5">NIC: <?php echo $row['NIC']; ?></p>
+                            <p class="h5">Current Address: <?php echo $row['Current_Address']; ?></p>
+                            <p class="h5">Contact Number: <?php echo $row['Contact_Num']; ?></p>
+                            <p class="h5">Email: <?php echo $row['Contact_Mail']; ?></p>
+                            <p class="h5">User Name: <?php echo $row['userName']; ?></p>
                             <a href="#" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#myModal">Edit Profile</a>
                         </div>
                     </div>
@@ -169,6 +169,7 @@
                     </div>
 
                 </div>
+        
             </div>
 
             <br>
